@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 void main() => runApp(const MyApp());
 
@@ -14,6 +15,9 @@ class MyApp extends StatelessWidget {
     /// It does not matter even when the child is not a scrollable widget as seen in [D]
     ///
     /// I also noticed the behavior changes when you comment out [A] and [B].
+    ///
+    /// This behavior can also be observed if you replace SliverFillRemaining with SliverToBoxAdapter
+    /// So most-likely something changed in the CustomScrollView implementation or an implementation detail in the engine
     return CupertinoApp(
       home: CupertinoPageScaffold(
         child: CustomScrollView(
@@ -36,11 +40,22 @@ class MyApp extends StatelessWidget {
               child: SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 32.0),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    for (var i = 0; i < 100; i++) ...[
-                      Text('Item $i', style: const TextStyle(fontSize: 20)),
-                      const SizedBox(height: 16),
-                    ]
+                    for (var i = 0; i < 100; i++)
+                      Material(
+                        type: MaterialType.transparency,
+                        child: InkWell(
+                          child: Ink(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Text(
+                              'Item $i',
+                              style: const TextStyle(fontSize: 20, color: Colors.red),
+                            ),
+                          ),
+                          onTap: () {},
+                        ),
+                      ),
                   ],
                 ),
               ),
